@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map with Multiple Pins and Radius Circles</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh; /* Full viewport height for the map */
+            width: 100%;   /* Full width for the map */
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Leaflet JS library -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<script>
+    // Coordinates and radius for the three points to create a union effect
+    const point1 = { latitude: -6.243174, longitude: 106.783521, radius: 500 }; // Starting point
+    const point2 = { latitude: -6.244500, longitude: 106.784800, radius: 400 }; // Second point slightly northeast
+    const point3 = { latitude: -6.249000, longitude: 106.782300, radius: 400 }; // Third point slightly southwest
+
+
+    // Initialize the map centered around the first point
+    const map = L.map('map').setView([point1.latitude, point1.longitude], 15);
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Function to add a marker and circle for each point
+    function addMarkerWithCircle(point, label, color) {
+        L.marker([point.latitude, point.longitude]).addTo(map)
+            .bindPopup(label)
+            .openPopup();
+
+        L.circle([point.latitude, point.longitude], {
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.3,
+            radius: point.radius
+        }).addTo(map);
+    }
+
+    // Add each point with respective radii and colors
+    addMarkerWithCircle(point1, 'Location 1 (500m Radius)', 'blue');
+    addMarkerWithCircle(point2, 'Location 2 (400m Radius)', 'green');
+    addMarkerWithCircle(point3, 'Location 3 (400m Radius)', 'red');
+
+</script>
+
+</body>
+</html>
